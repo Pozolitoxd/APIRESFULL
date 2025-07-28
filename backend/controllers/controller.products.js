@@ -1,4 +1,6 @@
 const Product = require('../models/model.products');
+const configEmail = require('../services/email.service');
+require('dotenv').config()
 
 //funcion para el manejo de errores y no reutilizar codigo xd
 function controllError(res,message,error){
@@ -16,6 +18,15 @@ const getProducts = async (req,res)=>{
                 message:'Se obtuvieron los productos',
                 data:productos
             })
+            
+            // Enviar email de notificación
+            configEmail(
+                process.env.EMAIL_USER,
+                'estebantoro.p.7@gmail.com',
+                'Productos obtenidos',
+                `Se obtuvieron ${productos.length} productos exitosamente`
+            );
+
     } catch (error) {
         controllError(res,'No se pudo encontrar productos debido a un error', error)
     }
